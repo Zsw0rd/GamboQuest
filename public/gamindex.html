@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gambo - Home</title>
     <link rel="icon" type="image/jpg" href="images/logo.png">
+    <link rel="preload" href="gambo.css" as="style">
     <link rel="stylesheet" href="gambo.css">
-    <script src="gambo.js"></script>
+    <script defer src="js/core.js"></script>
+    <script defer src="js/home.js"></script>
     <style>
         .slot-info{
             color: gold;
@@ -34,7 +36,7 @@
         <div class="balance-section">
             <div id="balance"></div>
             <div class="transaction-buttons">
-                <button onclick="universalUpdateBalance(100)">Deposit $100</button>
+                <button onclick="claimDailyBonus()">Daily Bonus +$100</button>
             </div>
             <div class="logout">
                 <button onclick="userLogout()">Logout</button>
@@ -49,7 +51,7 @@
 
     <div class="container">
         <div class="slotcard" onclick="universalOpenPage('slot_machine.html')">
-            <img src="images/slot.png" alt="Slot_Machine">
+            <img src="images/slot.png" alt="Slot_Machine" loading="lazy" decoding="async">
             <div class="slot-info">
                 <h2>Slot Machine</h2>
             </div>

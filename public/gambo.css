@@ -161,6 +161,8 @@ header h1 {
     transform: scale(1.05);
 }
 .slotcard img {
+    content-visibility: auto;
+    contain-intrinsic-size: 200px 150px;
     width: 100%;
     height: 410px;
     object-fit: cover;

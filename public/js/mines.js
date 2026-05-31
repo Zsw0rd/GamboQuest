@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (result.gameOver && result.won) {
       minesRevealAll(result.bombPositions);
-      minesMessageEl.textContent = `All safe tiles! You won $${result.payout}!`;
+      minesMessageEl.textContent = `All safe tiles! You won ${formatCurrency(result.payout)}!`;
       playSweepSfx('sfx/betprsfx.mp3');
       minesEndGame();
     } else {
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = await playGame({ game: 'mines', action: 'cashout', sessionId: minesSessionId });
     if (result.error) { showErrorPopup(result.error); minesCashoutBtn.disabled = false; return; }
     minesRevealAll(result.bombPositions);
-    minesMessageEl.textContent = `Cashed out! You won $${result.payout}!`;
+    minesMessageEl.textContent = `Cashed out! You won ${formatCurrency(result.payout)}!`;
     playSweepSfx('sfx/betprsfx.mp3');
     minesEndGame();
   }

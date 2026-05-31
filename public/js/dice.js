@@ -86,10 +86,10 @@ function initDiceGame() {
     if (rollMessage) rollMessage.textContent = `Roll = ${result.rollResult.toFixed(2)}`;
     if (result.won) {
       playSfx('sfx/winsfx.mp3', diceAudioEnabled);
-      if (diceResultMsg) diceResultMsg.textContent = `You won $${result.profit}! Balance: $${result.balance}`;
+      if (diceResultMsg) diceResultMsg.textContent = `You won ${formatCurrency(result.profit)}! Balance: ${formatCurrency(result.balance)}`;
     } else {
       playSfx('sfx/slotLosesfx.mp3', diceAudioEnabled);
-      if (diceResultMsg) diceResultMsg.textContent = `You lost $${bet}. Balance: $${result.balance}`;
+      if (diceResultMsg) diceResultMsg.textContent = `You lost ${formatCurrency(bet)}. Balance: ${formatCurrency(result.balance)}`;
     }
   };
 

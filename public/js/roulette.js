@@ -1,6 +1,6 @@
 let rouletteAudioEnabled = true;
 const ROULETTE_MAX_TOTAL_BET = 1000;
-const ROULETTE_DEFAULT_COIN_SRC = 'images/bet_coins/10$.png';
+const ROULETTE_DEFAULT_COIN_SRC = 'images/bet_coins/10GQC.png';
 const ROULETTE_SEGMENT_ANGLE = 360 / 37;
 const ROULETTE_WHEEL_SPIN_MS = 5800;
 const ROULETTE_BALL_SPIN_MS = 7200;
@@ -127,7 +127,7 @@ function initRouletteGame() {
       img.alt = '';
 
       const label = document.createElement('span');
-      label.textContent = `$${amount}`;
+      label.textContent = formatCurrency(amount);
 
       chip.append(img, label);
       chipLayer.appendChild(chip);
@@ -206,7 +206,7 @@ function initRouletteGame() {
     const balance = getStoredBalance();
     if (balance < pending + selectedCoinValue) { showErrorPopup('Insufficient balance!'); return; }
     if (pending + selectedCoinValue > ROULETTE_MAX_TOTAL_BET) {
-      showErrorPopup(`Roulette bets are limited to $${ROULETTE_MAX_TOTAL_BET} per spin`);
+      showErrorPopup(`Roulette bets are limited to ${formatCurrency(ROULETTE_MAX_TOTAL_BET)} per spin`);
       return;
     }
     if (!bets[spot]) bets[spot] = 0;
@@ -215,7 +215,7 @@ function initRouletteGame() {
     renderBetChips();
     if (rouletteMessage) {
       const total = totalBetAmount();
-      rouletteMessage.textContent = `Bet $${selectedCoinValue} on ${spot}. Pending total: $${total}`;
+      rouletteMessage.textContent = `Bet ${formatCurrency(selectedCoinValue)} on ${spot}. Pending total: ${formatCurrency(total)}`;
     }
     playRouletteSfx('sfx/betprsfx.mp3');
   };
@@ -265,7 +265,7 @@ function initRouletteGame() {
     settleBetChips(result.settledBets || {});
     if (rouletteMessage) {
       rouletteMessage.textContent = result.totalWon > 0
-        ? `Number ${result.winningNum}! You won $${result.totalWon}!`
+        ? `Number ${result.winningNum}! You won ${formatCurrency(result.totalWon)}!`
         : `Number ${result.winningNum}. Better luck next time.`;
     }
     if (result.totalWon > 0) playRouletteSfx('sfx/slotJackpotsfx.mp3');
@@ -295,7 +295,7 @@ function initRouletteGame() {
       const ul = document.createElement('ul');
       entries.forEach(([spot, amount]) => {
         const li = document.createElement('li');
-        li.textContent = `${spot}: $${amount}`;
+        li.textContent = `${spot}: ${formatCurrency(amount)}`;
         ul.appendChild(li);
       });
       list.appendChild(ul);

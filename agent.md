@@ -22,7 +22,7 @@ stay validated on the server.
 
 - Never trust a bet, session id, cell index, or payout from the browser.
 - Keep wager caps aligned with the database RPC cap. Current front-end/server
-  game cap is `$1000`; database per-transaction cap is `$50000`.
+  game cap is `1000 GQC`; database per-transaction cap is `50000 GQC`.
 - Do not expose `SUPABASE_SERVICE_ROLE_KEY` to the browser. It belongs in server
   runtime environment only.
 - Prefer `textContent`, `replaceChildren`, and DOM node creation over HTML string

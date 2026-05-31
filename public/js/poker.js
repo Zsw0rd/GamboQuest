@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let shownCommunityCount = 0;
 
   function pokerMsg(msg) { if (gameMsgEl) gameMsgEl.textContent = msg; }
-  function pokerPot(p) { if (potEl) potEl.textContent = `$${p}`; }
+  function pokerPot(p) { if (potEl) potEl.textContent = formatCurrency(p); }
   function pokerDisableBtns() { [betBtn, raiseBtn, foldBtn].forEach((b) => { if (b) b.disabled = true; }); }
   function pokerEnableBtns() {
     if (betBtn) betBtn.disabled = false;
@@ -151,8 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const winnerLabel = result.winner === 'bot1' ? 'Bot 1' : result.winner === 'bot2' ? 'Bot 2' : 'Opponent';
       if (result.winner === 'player') {
         pokerMsg(result.tie
-          ? `Split pot${result.payout ? ` - you receive $${result.payout}` : ''}${handText}.`
-          : `You win${result.payout ? ` $${result.payout}` : ''}${handText}!`);
+          ? `Split pot${result.payout ? ` - you receive ${formatCurrency(result.payout)}` : ''}${handText}.`
+          : `You win${result.payout ? ` ${formatCurrency(result.payout)}` : ''}${handText}!`);
         playPokerSfx('sfx/winsfx.mp3');
       } else {
         pokerMsg(`${winnerLabel} wins the pot${winningHandText}.`);

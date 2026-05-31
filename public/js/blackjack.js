@@ -69,7 +69,7 @@ async function blackJackPlaceBet(amount) {
 
   bjBet = amount;
   bjDisableBetButtons();
-  document.getElementById('currentBet').textContent = `$${amount}`;
+  document.getElementById('currentBet').textContent = formatCurrency(amount);
   document.getElementById('gameMessage').textContent = 'Dealing...';
 
   const result = await playGame({ game: 'blackjack', action: 'start', bet: amount });
@@ -150,17 +150,17 @@ async function blackJackStand() {
 function bjEndRound(result) {
   const msg = document.getElementById('gameMessage');
   if (result.result === 'win' || result.result === 'blackjack') {
-    msg.textContent = `You win! +$${result.payout}`;
+    msg.textContent = `You win! +${formatCurrency(result.payout)}`;
     playSfx('sfx/winsfx.mp3', blackjackAudioEnabled);
   } else if (result.result === 'tie') {
-    msg.textContent = `Push - bet returned ($${result.payout})`;
+    msg.textContent = `Push - bet returned (${formatCurrency(result.payout)})`;
   } else {
     msg.textContent = 'You lose!';
     playSfx('sfx/slotLosesfx.mp3', blackjackAudioEnabled);
   }
   bjSessionId = null;
   bjBet = 0;
-  document.getElementById('currentBet').textContent = '$0';
+  document.getElementById('currentBet').textContent = formatCurrency(0);
   document.getElementById('hitButton').disabled = true;
   document.getElementById('standButton').disabled = true;
   bjEnableBetButtons();

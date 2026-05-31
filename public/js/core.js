@@ -2,6 +2,11 @@
 
 const AUDIO_ON_ICON = '\u{1F50A}';
 const AUDIO_OFF_ICON = '\u{1F507}';
+const GAME_CURRENCY = 'GQC';
+
+function formatCurrency(amount) {
+  return `${amount} ${GAME_CURRENCY}`;
+}
 
 function ensurePopupRoot() {
   let root = document.getElementById('gamboquestPopupRoot');
@@ -249,7 +254,7 @@ async function claimDailyBonus() {
   const data = await res.json();
   if (!res.ok) { showErrorPopup(data.error || 'Could not claim daily bonus'); return; }
   applyServerBalance(data.balance);
-  showSuccessPopup('Daily bonus claimed: +$100');
+  showSuccessPopup(`Daily bonus claimed: +${formatCurrency(100)}`);
 }
 
 function universalUpdateDisplayBalance() {
@@ -257,7 +262,7 @@ function universalUpdateDisplayBalance() {
   if (!balEl) return;
   const username = localStorage.getItem('username') || 'Guest';
   const bal = getStoredBalance();
-  balEl.textContent = `User: ${username} | Balance: $${bal}`;
+  balEl.textContent = `User: ${username} | Balance: ${formatCurrency(bal)}`;
 }
 
 async function universalInitializeBalance() {

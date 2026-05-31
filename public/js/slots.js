@@ -67,7 +67,7 @@ async function slotPlaySlot() {
   await stopReel('slot3', result.reels[2], i3, 400);
 
   if (result.winnings > 0) {
-    resultMessage.textContent = `You won $${result.winnings}!`;
+    resultMessage.textContent = `You won ${formatCurrency(result.winnings)}!`;
     playSfx('sfx/slotJackpotsfx.mp3', slotAudioEnabled);
   } else {
     resultMessage.textContent = 'You lost! Better luck next time.';

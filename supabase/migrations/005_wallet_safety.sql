@@ -1,4 +1,4 @@
--- Gambo: wallet safety hardening
+-- GAMBOQUEST: wallet safety hardening
 -- Replaces balance mutation functions so insufficient funds fail cleanly before
 -- row-level check constraints are hit.
 

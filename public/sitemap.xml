@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <url><loc>https://gambo.vercel.app/</loc></url>
+  <url><loc>https://gamboquest.vercel.app/</loc></url>
 
-  <url><loc>https://gambo.vercel.app/gamindex.html</loc></url>
-  <url><loc>https://gambo.vercel.app/blackjack.html</loc></url>
-  <url><loc>https://gambo.vercel.app/poker.html</loc></url>
-  <url><loc>https://gambo.vercel.app/sweepBomb.html</loc></url>
-  <url><loc>https://gambo.vercel.app/slot_machine.html</loc></url>
-  <url><loc>https://gambo.vercel.app/roulette.html</loc></url>
-  <url><loc>https://gambo.vercel.app/dicy.html</loc></url>
+  <url><loc>https://gamboquest.vercel.app/gamindex.html</loc></url>
+  <url><loc>https://gamboquest.vercel.app/blackjack.html</loc></url>
+  <url><loc>https://gamboquest.vercel.app/poker.html</loc></url>
+  <url><loc>https://gamboquest.vercel.app/sweepBomb.html</loc></url>
+  <url><loc>https://gamboquest.vercel.app/slot_machine.html</loc></url>
+  <url><loc>https://gamboquest.vercel.app/roulette.html</loc></url>
+  <url><loc>https://gamboquest.vercel.app/dicy.html</loc></url>
 </urlset>

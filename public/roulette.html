@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roulette - Gambo</title>
+  <title>Roulette - GAMBOQUEST</title>
   <link rel="icon" type="image/png" href="images/logo.png">
-  <link rel="preload" href="gambo.css" as="style">
-  <link rel="stylesheet" href="gambo.css">
+  <link rel="preload" href="gamboquest.css" as="style">
+  <link rel="stylesheet" href="gamboquest.css">
   <script defer src="js/core.js"></script>
-  <script defer src="js/roulette.js"></script>
+  <script defer src="js/roulette.js?v=roulette-rim-ball-3"></script>
   <style>
     /* Main Container */
     #rouletteGame {
@@ -100,6 +100,56 @@
       transform: scale(1.1);
     }
 
+    .bet-chip-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .roulette-chip {
+      position: absolute;
+      width: clamp(18px, 4.2vw, 44px);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      filter: drop-shadow(0 7px 8px rgba(0, 0, 0, 0.5));
+      animation: rouletteChipIn 0.22s ease-out;
+    }
+
+    .roulette-chip img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+
+    .roulette-chip span {
+      position: absolute;
+      left: 50%;
+      bottom: -3px;
+      transform: translateX(-50%);
+      min-width: 70%;
+      padding: 1px 4px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.78);
+      color: #fff;
+      border: 1px solid rgba(255, 212, 59, 0.75);
+      font-size: clamp(7px, 1.1vw, 12px);
+      line-height: 1.1;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .roulette-chip-win {
+      animation: rouletteChipWin 0.9s ease-in-out both;
+    }
+
+    .roulette-chip-lose {
+      animation: rouletteChipLose 0.7s ease-in forwards;
+    }
+
     /* Outside Bets */
     .outside-bets {
       position: absolute;
@@ -142,17 +192,40 @@
       position: relative;
       width: 100%;
       height: 100%;
-      transition: transform 5s cubic-bezier(0.32, 0.64, 0.45, 1);
+      transition: none;
       cursor: pointer;
     }
-    #rouletteRing {
+    #rouletteBallTrack {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 4%;
       pointer-events: none;
-      z-index: 3;
+      transform-origin: 50% 50%;
+      transition: none;
+      z-index: 4;
+    }
+
+    #rouletteBall {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: clamp(9.5px, 3.68%, 14.7px);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 28%, #fff 0 18%, #f7f1dc 28%, #d7d0bb 62%, #8d846f 100%);
+      box-shadow:
+        0 0 8px rgba(255, 255, 255, 0.85),
+        0 4px 7px rgba(0, 0, 0, 0.65);
+      transition: none;
+    }
+
+    .wheel-container.is-ball-on-rim #rouletteBall {
+      top: 11%;
+    }
+
+    .wheel-container.is-spinning #rouletteBall {
+      animation: rouletteBallRattle 0.48s linear infinite;
     }
 
     /* highlight on hover */
@@ -160,6 +233,55 @@
       outline: 2px solid yellow;
       z-index: 3;
       transform: scale(1.15);
+    }
+
+    .roulette-winning-spot {
+      outline: 3px solid #ffd43b;
+      filter: drop-shadow(0 0 12px rgba(255, 212, 59, 0.95));
+      z-index: 8;
+    }
+
+    @keyframes rouletteChipIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -75%) scale(1.25);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    @keyframes rouletteChipWin {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      45% {
+        transform: translate(-50%, -50%) scale(1.28);
+        filter: drop-shadow(0 0 14px rgba(255, 212, 59, 1));
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+    }
+
+    @keyframes rouletteChipLose {
+      to {
+        opacity: 0;
+        transform: translate(-40%, 35%) scale(0.35);
+      }
+    }
+
+    @keyframes rouletteBallRattle {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-42%, -55%) scale(0.92);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
     }
 
     /* Controls */
@@ -274,7 +396,7 @@
     <a href="gamindex.html" class="logo">
       <img src="images/logo.png" alt="Website Logo" width="40" height="40">
     </a>
-    <h1>GAMBO</h1>
+    <h1>GAMBOQUEST</h1>
     <div class="balance-section">
       <div id="balance">Balance: $1000</div>
     </div>
@@ -420,10 +542,14 @@
 
         </div>
 
+        <div id="rouletteChipLayer" class="bet-chip-layer" aria-hidden="true"></div>
+
         <!-- Wheel Container near bottom -->
         <div class="wheel-container">
           <img id="rouletteWheel" src="images/roulettebet/rouletteWheel.png" alt="Roulette Wheel">
-          <img id="rouletteRing" src="images/roulettebet/rouletteWheelRing.png" alt="Wheel Ring">
+          <div id="rouletteBallTrack" aria-hidden="true">
+            <span id="rouletteBall"></span>
+          </div>
         </div>
       </div>
 
@@ -444,7 +570,7 @@
   </div>
 
   <footer class="site-footer">
-    <p>&copy; 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
+    <p>&copy; 2025 GAMBOQUEST by Team ZSw0rD. All rights reserved.</p>
   </footer>
 
 

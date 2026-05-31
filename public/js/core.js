@@ -1,14 +1,14 @@
-/* Gambo core: auth, wallet, game API, popups, performance utilities */
+/* GAMBOQUEST core: auth, wallet, game API, popups, performance utilities */
 
 const AUDIO_ON_ICON = '\u{1F50A}';
 const AUDIO_OFF_ICON = '\u{1F507}';
 
 function ensurePopupRoot() {
-  let root = document.getElementById('gamboPopupRoot');
+  let root = document.getElementById('gamboquestPopupRoot');
   if (root) return root;
 
   root = document.createElement('div');
-  root.id = 'gamboPopupRoot';
+  root.id = 'gamboquestPopupRoot';
   root.className = 'popup-root';
   root.setAttribute('aria-live', 'polite');
   root.setAttribute('aria-atomic', 'false');
@@ -20,7 +20,7 @@ function showPopup(message, type = 'info', timeout = 4200) {
   const root = ensurePopupRoot();
   const popup = document.createElement('div');
   const cleanType = ['success', 'error', 'info'].includes(type) ? type : 'info';
-  popup.className = `gambo-popup gambo-popup-${cleanType}`;
+  popup.className = `gamboquest-popup gamboquest-popup-${cleanType}`;
   popup.setAttribute('role', cleanType === 'error' ? 'alert' : 'status');
 
   const text = document.createElement('span');
@@ -28,7 +28,7 @@ function showPopup(message, type = 'info', timeout = 4200) {
 
   const close = document.createElement('button');
   close.type = 'button';
-  close.className = 'gambo-popup-close';
+  close.className = 'gamboquest-popup-close';
   close.setAttribute('aria-label', 'Dismiss message');
   close.textContent = 'x';
 

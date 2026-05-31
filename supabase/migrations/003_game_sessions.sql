@@ -1,4 +1,4 @@
--- Gambo: foundation for future server-side game validation
+-- GAMBOQUEST: foundation for future server-side game validation
 -- Not wired to the client yet; prepares fair-play architecture.
 
 create table if not exists public.game_sessions (

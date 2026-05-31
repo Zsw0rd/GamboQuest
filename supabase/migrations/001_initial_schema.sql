@@ -1,4 +1,4 @@
--- Gambo: initial schema for Supabase Auth + profiles
+-- GAMBOQUEST: initial schema for Supabase Auth + profiles
 -- Run via Supabase CLI or SQL Editor after enabling Auth (email/password).
 
 -- ---------------------------------------------------------------------------

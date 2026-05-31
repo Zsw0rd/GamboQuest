@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gambo.vercel.app/sitemap.xml
+Sitemap: https://gamboquest.vercel.app/sitemap.xml

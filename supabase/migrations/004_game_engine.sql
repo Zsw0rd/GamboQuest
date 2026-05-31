@@ -1,4 +1,4 @@
--- Gambo: server-side game engine (guest sessions + session state)
+-- GAMBOQUEST: server-side game engine (guest sessions + session state)
 
 create table if not exists public.guest_sessions (
   id uuid primary key default gen_random_uuid(),

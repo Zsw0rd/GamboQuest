@@ -1,6 +1,6 @@
-# Gambo
+# GAMBOQUEST
 
-Gambo is a browser-based casino game demo built with static HTML/CSS/JS, Next.js
+GAMBOQUEST is a browser-based casino game demo built with static HTML/CSS/JS, Next.js
 API routes, and Supabase. The client handles presentation and animations; the
 server validates sessions, bets, random outcomes, payouts, and wallet updates.
 
@@ -49,7 +49,7 @@ fairness/accounting model.
 |   +-- guest.js            # Guest session creation
 +-- public/
 |   +-- *.html              # Static screens
-|   +-- gambo.css           # Shared styling
+|   +-- gamboquest.css           # Shared styling
 |   +-- js/                 # Browser-side game scripts
 |   +-- images/             # Game art and card assets
 |   +-- sfx/                # Sound effects

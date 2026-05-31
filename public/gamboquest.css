@@ -219,7 +219,7 @@ button:hover {
     z-index: 10000;
 }
 
-.gambo-popup {
+.gamboquest-popup {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -235,20 +235,20 @@ button:hover {
     transition: opacity 0.18s, transform 0.18s;
 }
 
-.gambo-popup-success {
+.gamboquest-popup-success {
     border-left-color: var(--accent-strong);
 }
 
-.gambo-popup-error {
+.gamboquest-popup-error {
     border-left-color: var(--danger);
 }
 
-.gambo-popup.is-hiding {
+.gamboquest-popup.is-hiding {
     opacity: 0;
     transform: translateY(-6px);
 }
 
-.gambo-popup-close {
+.gamboquest-popup-close {
     width: 28px;
     height: 28px;
     min-width: 28px;

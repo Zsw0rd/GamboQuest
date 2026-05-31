@@ -1,4 +1,4 @@
--- Gambo: server-authoritative balance adjustments
+-- GAMBOQUEST: server-authoritative balance adjustments
 -- Only callable with the service role (via Next.js API routes).
 
 create or replace function public.adjust_balance(

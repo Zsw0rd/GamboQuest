@@ -19,9 +19,10 @@ fairness/accounting model.
   - Roulette
   - Sweep Bombs / Mines
   - Blackjack
-  - Simplified Poker
+  - Poker
 - Daily authenticated-user bonus.
 - In-app popup notifications instead of blocking browser alerts.
+- Shared responsive styling with video-backed game screens.
 - Security headers, API body-size limits, basic rate limiting, and Supabase RLS.
 
 ## Tech Stack
@@ -151,6 +152,31 @@ All API routes accept `POST` only.
 Authenticated requests use a Bearer token. Guest game requests use a
 server-created `guestToken` stored in `sessionStorage`.
 
+## Game Rules And Settlement Notes
+
+- Blackjack:
+  - Bets are deducted at deal time.
+  - Player blackjack pays `2.5x`.
+  - Dealer blackjack settles immediately unless both sides have blackjack, which
+    is a push.
+  - Dealer stands on 17.
+  - The server rejects hits once the player is already at 21.
+- Poker:
+  - The server deals all cards, owns the pot, tracks folded players, and
+    evaluates showdown hands.
+  - Showdown uses best 5-card ranking from 7 cards, including straights,
+    flushes, full houses, four of a kind, straight flushes, and tie breakers.
+  - Tied pots are split when the player is among the winners.
+  - Bot decisions are intentionally lightweight check/call/fold responses for
+    the current compact UI.
+- Dice:
+  - Threshold, roll-under/roll-over mode, chance, multiplier, roll result, and
+    payout are determined server-side.
+  - The browser-side multiplier and profit fields are preview UI only.
+- Mines:
+  - Bomb positions live in the server session.
+  - Reveals validate the requested cell index and never trust client state.
+
 ## Security Notes
 
 Current protections:
@@ -161,6 +187,9 @@ Current protections:
 - Game sessions are owner-scoped by user id or guest token.
 - Mines reveal requests require integer cell indexes.
 - Roulette spots and total bet size are validated server-side.
+- Blackjack initial naturals and hit-on-21 are handled server-side.
+- Poker showdown winners are evaluated server-side instead of selected by the
+  browser.
 - Browser messages use DOM text nodes instead of HTML injection.
 - `npm audit` is clean with a PostCSS override for Next's transitive dependency.
 
@@ -170,7 +199,6 @@ Known production hardening still recommended:
 - Move remaining inline HTML event handlers into external JS and tighten CSP.
 - Add provider-level rate limiting or WAF rules.
 - Add formal tests for every game payout path.
-- Replace simplified poker winner selection with a real hand evaluator.
 - Add admin/accounting tools for wallet reconciliation.
 
 ## Maintenance

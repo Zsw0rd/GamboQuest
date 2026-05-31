@@ -12,7 +12,8 @@ stay validated on the server.
   API calls, audio helpers, and in-app popups.
 - `public/js/*.js` owns per-game browser interactions and animations.
 - `pages/api/*.js` exposes auth, guest-session, balance, and game endpoints.
-- `lib/games/*.js` is the server-side game engine and payout logic.
+- `lib/games/*.js` is the server-side game engine, RNG, hand evaluation, and
+  payout logic.
 - `lib/wallet.js` is the only app-level wallet mutation wrapper.
 - `supabase/migrations/*.sql` defines profiles, wallet RPCs, game sessions, and
   guest balances.
@@ -29,6 +30,21 @@ stay validated on the server.
 - Keep API body limits and rate limiting on new API routes.
 - Apply new Supabase changes as forward migrations instead of silently editing
   already-applied production migrations.
+- After changing a game engine, smoke test the server API path with a guest
+  session and run `npm run build`.
+
+## Game Logic Notes
+
+- Blackjack settles initial naturals immediately: player blackjack pays 2.5x,
+  dealer blackjack loses unless both have blackjack, and a shared blackjack is a
+  push. Dealer stands on 17. Hitting at 21 is rejected server-side.
+- Poker is still a compact table flow, but showdown uses real 7-card hand
+  evaluation and tie splitting. Bot behavior is intentionally simple and limited
+  to check/call/fold responses that match the current UI.
+- Dice calculates chance and multiplier server-side from the submitted threshold
+  and roll mode; the browser display is only a preview.
+- Mines stores bomb positions in the server session and reveals only through
+  validated cell indexes.
 
 ## Commands
 
@@ -58,5 +74,6 @@ secret and bypasses row-level security.
 - The app still uses static HTML with inline event attributes in several pages,
   which is why the CSP allows inline scripts. Moving those handlers into
   external JS would allow a stricter CSP.
-- The poker game is intentionally simplified; the showdown winner is randomized
-  among active players rather than evaluated with full poker hand rankings.
+- The games are entertainment/demo implementations, not audited real-money
+  gaming engines. Any production gambling use needs legal review, formal tests,
+  accounting controls, and fairness audits.

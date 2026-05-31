@@ -111,8 +111,12 @@ async function blackJackHit() {
     return;
   }
 
-  document.getElementById('gameMessage').textContent = `Your hand: ${result.playerValue}`;
-  document.getElementById('hitButton').disabled = false;
+  if (result.playerValue >= 21) {
+    document.getElementById('gameMessage').textContent = `Your hand: ${result.playerValue} - stand to finish.`;
+  } else {
+    document.getElementById('gameMessage').textContent = `Your hand: ${result.playerValue}`;
+    document.getElementById('hitButton').disabled = false;
+  }
 }
 
 async function blackJackStand() {

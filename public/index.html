@@ -10,6 +10,280 @@
   <script defer src="js/core.js"></script>
 
   <style>
+    body {
+      background: #0a0a0a;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Landing background (logo + game assets) ── */
+    .landing-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      --ring-1-size: min(135vw, 1080px);
+      --ring-2-size: min(165vw, 1350px);
+      --ring-3-size: min(82.5vw, 660px);
+      --wm-logo-size: min(105vw, 840px);
+      --asset-xl: min(31.5vw, 330px);
+      --asset-lg: min(27vw, 263px);
+      --asset-md: min(22.5vw, 210px);
+      --prop-card: min(6.5vw, 78px);
+      --prop-icon-lg: min(11.25vw, 113px);
+      --prop-icon-md: min(9vw, 90px);
+      --float-y: 8px;
+    }
+
+    .landing-bg-base {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(34, 167, 7, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(180, 30, 30, 0.14) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 10% 70%, rgba(255, 212, 59, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, #141a12 0%, #0a0a0a 70%);
+    }
+
+    .landing-bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.65) 100%);
+    }
+
+    .landing-bg-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 212, 59, 0.07);
+    }
+
+    .landing-bg-ring--1 {
+      width: var(--ring-1-size);
+      height: var(--ring-1-size);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .landing-bg-ring--2 {
+      width: var(--ring-2-size);
+      height: var(--ring-2-size);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-style: dashed;
+      border-color: rgba(255, 212, 59, 0.04);
+      animation: ring-spin 120s linear infinite;
+    }
+    .landing-bg-ring--3 {
+      width: var(--ring-3-size);
+      height: var(--ring-3-size);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-color: rgba(34, 167, 7, 0.08);
+    }
+
+    @keyframes ring-spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .landing-bg-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: var(--wm-logo-size);
+      height: auto;
+      transform: translate(-50%, -50%);
+      opacity: 0.07;
+      filter: blur(1px);
+    }
+
+    .landing-bg-asset {
+      position: absolute;
+      opacity: 0.13;
+      filter: blur(0.5px) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+      animation: asset-float 14s ease-in-out infinite;
+      max-width: 38vw;
+      max-height: 28vh;
+      object-fit: contain;
+    }
+    /* Top band — above hero / form */
+    .landing-bg-asset--roulette {
+      width: var(--asset-xl);
+      top: 4%;
+      right: 4%;
+      left: auto;
+      bottom: auto;
+      --rot: 12deg;
+      animation-delay: 0s;
+    }
+    .landing-bg-asset--poker {
+      width: var(--asset-lg);
+      top: 5%;
+      left: 5%;
+      right: auto;
+      bottom: auto;
+      --rot: -14deg;
+      animation-delay: -6s;
+    }
+    /* Right edge — clear of center form */
+    .landing-bg-asset--mines {
+      width: var(--asset-md);
+      top: 50%;
+      right: max(8px, 1vw);
+      left: auto;
+      bottom: auto;
+      transform: translateY(-50%) rotate(-10deg);
+      --rot: -10deg;
+      animation-delay: -5s;
+      opacity: 0.1;
+    }
+    /* Bottom band — below hero / form */
+    .landing-bg-asset--blackjack {
+      width: var(--asset-lg);
+      bottom: 3%;
+      left: max(8px, 1vw);
+      top: auto;
+      right: auto;
+      --rot: -8deg;
+      animation-delay: -3s;
+    }
+    .landing-bg-asset--slot {
+      width: var(--asset-lg);
+      bottom: 10%;
+      right: 10%;
+      top: auto;
+      left: auto;
+      --rot: 6deg;
+      animation-delay: -9s;
+    }
+    .landing-bg-asset--dicy {
+      width: var(--asset-md);
+      bottom: max(8px, 1vh);
+      left: 50%;
+      right: auto;
+      top: auto;
+      transform: translateX(42%) rotate(18deg);
+      --rot: 18deg;
+      animation-delay: -11s;
+      opacity: 0.1;
+    }
+
+    @keyframes asset-float {
+      0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+      50% { transform: translateY(calc(var(--float-y) * -1)) rotate(calc(var(--rot, 0deg) + 2deg)); }
+    }
+    .landing-bg-asset--mines {
+      animation-name: asset-float-mines;
+    }
+    @keyframes asset-float-mines {
+      0%, 100% { transform: translateY(-50%) rotate(var(--rot, 0deg)); }
+      50% { transform: translateY(calc(-50% - var(--float-y))) rotate(calc(var(--rot, 0deg) + 2deg)); }
+    }
+    .landing-bg-asset--dicy {
+      animation-name: asset-float-dicy;
+    }
+    @keyframes asset-float-dicy {
+      0%, 100% { transform: translateX(42%) translateY(0) rotate(var(--rot, 0deg)); }
+      50% { transform: translateX(42%) translateY(calc(var(--float-y) * -1)) rotate(calc(var(--rot, 0deg) + 2deg)); }
+    }
+
+    .landing-bg-prop {
+      position: absolute;
+      opacity: 0.2;
+      filter: drop-shadow(0 4px 12px rgba(255, 212, 59, 0.25));
+      animation: prop-drift 18s ease-in-out infinite;
+      object-fit: contain;
+    }
+    .landing-bg-prop--card {
+      width: var(--prop-card);
+      height: auto;
+      max-width: 10vw;
+      max-height: 16vh;
+      border-radius: 4px;
+      opacity: 0.18;
+    }
+    .landing-bg-prop--icon {
+      max-width: 14vw;
+      max-height: 14vh;
+    }
+    .landing-bg-prop--card1 {
+      top: 30%;
+      bottom: auto;
+      left: max(8px, 1vw);
+      right: auto;
+      --rot: -10deg;
+      animation-delay: 0s;
+    }
+    .landing-bg-prop--card2 {
+      top: 35%;
+      bottom: auto;
+      right: 28%;
+      --rot: 8deg;
+      animation-delay: -4s;
+      opacity: 0.16;
+    }
+    .landing-bg-prop--card3 {
+      top: 11%;
+      left: 36%;
+      --rot: -14deg;
+      animation-delay: -8s;
+      opacity: 0.15;
+    }
+    .landing-bg-prop--mine {
+      width: var(--prop-icon-md);
+      top: 13%;
+      right: 30%;
+      bottom: auto;
+      left: auto;
+      --rot: 4deg;
+      animation-delay: -6s;
+      opacity: 0.17;
+    }
+    .landing-bg-prop--coins {
+      width: var(--prop-icon-lg);
+      bottom: 12%;
+      left: calc(50% - 19%);
+      --rot: -6deg;
+      animation-delay: -10s;
+      opacity: 0.18;
+    }
+    .landing-bg-prop--triple {
+      width: var(--prop-icon-lg);
+      bottom: 20%;
+      right: 34%;
+      --rot: 10deg;
+      animation-delay: -12s;
+      opacity: 0.17;
+    }
+
+    @keyframes prop-drift {
+      0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+      33% { transform: translateY(calc(var(--float-y) * -1)) rotate(calc(var(--rot, 0deg) + 5deg)); }
+      66% { transform: translateY(calc(var(--float-y) * 0.75)) rotate(calc(var(--rot, 0deg) - 3deg)); }
+    }
+
+    .landing-bg-sparkle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 212, 59, 0.6);
+      box-shadow: 0 0 9px 3px rgba(255, 212, 59, 0.35);
+      animation: sparkle 4s ease-in-out infinite;
+    }
+    .landing-bg-sparkle--1 { top: 10%; left: 28%; animation-delay: 0s; }
+    .landing-bg-sparkle--2 { top: 18%; right: 22%; animation-delay: -1.2s; }
+    .landing-bg-sparkle--3 { bottom: 22%; right: 38%; animation-delay: -2.4s; }
+    .landing-bg-sparkle--4 { bottom: 12%; left: 28%; animation-delay: -0.8s; }
+    .landing-bg-sparkle--5 { top: 72%; right: 18%; animation-delay: -3s; }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.6); }
+    }
+
     #bgVideolog {
       position: fixed;
       top: 0;
@@ -17,58 +291,50 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index:1;
-      opacity:0.02;
-    }
-    body {
-      background: url('images/login.png') no-repeat center center fixed;
-      background-size: cover;
-      z-index:0;
-    }
-    #logH1 {
-      font-size: 75px;
-      font-weight: bold;
-      font-family: 'Times New Roman', Times, serif;
-      font-style: italic;
-      color: gold;
-      text-shadow:
-        -2px -2px 0 black,
-        2px -2px 0 black,
-        -2px 2px 0 black,
-        2px 2px 0 black;
-      margin: 0;            /* Remove default top/bottom margin */
-      margin-top: 30px;
-      margin-bottom: 10px;  /* Small gap after h1 */
+      z-index: 1;
+      opacity: 0.02;
+      pointer-events: none;
     }
 
-    #logp {
-      font-size: 25px;
-      font-weight: 900;
-      font-family: 'Times New Roman', Times, serif;
-      font-style: italic;
-      color: gold;
-      text-shadow:
-        -1px -1px 0 black,
-        1px -1px 0 black,
-        -1px 1px 0 black,
-        1px 1px 0 black;
-      margin: 0;           
-      margin-top: 2px;    
+    .landing-content {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
     }
+
+    .landing-hero-logo {
+      position: absolute;
+      top: 50%;
+      left: clamp(32px, 14.5vw, 110px);
+      transform: translateY(-50%);
+      width: min(586px, 62.5vw);
+      height: auto;
+      filter: drop-shadow(0 10px 36px rgba(0, 0, 0, 0.65));
+      pointer-events: none;
+    }
+
     .main {
-      width: 400px;
-      height: 500px;
-      background: rgba(255, 232, 100, 0.212);
-      overflow: hidden;
-      border-radius: 10px;
-      box-shadow: 5px 20px 50px #000;
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-40%,-50%);
-      z-index:2
+      transform: translate(-50%, -50%);
+      width: min(400px, 92vw);
+      height: 500px;
+      background: rgba(18, 22, 18, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 212, 59, 0.28);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+        0 0 40px rgba(34, 167, 7, 0.08);
+      z-index: 2;
+      pointer-events: auto;
     }
-    /* Checkboxes for toggling forms, hidden */
+
     #chk {
       display: none;
     }
@@ -78,19 +344,28 @@
       width: 100%;
       height: 100%;
       text-align: center;
+      pointer-events: none;
+    }
+
+    .signup form,
+    .login form,
+    .signup label,
+    .login label {
+      pointer-events: auto;
     }
 
     .signup label, .login label {
-      color: gold;
+      color: #ffd43b;
       text-shadow:
-      -1px -1px 0 black,
-      1px -1px 0 black,
-      -1px  1px 0 black,
-      1px  1px 0 black;           
-      font-size: 2.3em;
-      font-style: italic;
-      margin: 50px 0 20px 0;
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+      font-size: 2em;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: bold;
+      letter-spacing: 0.04em;
+      margin: 48px 0 18px 0;
       cursor: pointer;
       transition: 0.5s ease-in-out;
       display: block;
@@ -98,95 +373,218 @@
 
     .signup input, .login input {
       width: 80%;
-      background: #e0dede;
-      font-style: italic;
+      background: rgba(24, 24, 24, 0.92);
+      color: #fffaf0;
       margin: 10px auto;
-      padding: 12px;
-      font-size: 0.9em;
-      border: none;
+      padding: 13px 14px;
+      font-size: 0.95em;
+      font-family: Arial, Helvetica, sans-serif;
+      border: 1px solid rgba(255, 212, 59, 0.22);
       outline: none;
-      border-radius: 5px;
+      border-radius: 8px;
       display: block;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .signup input::placeholder, .login input::placeholder {
+      color: rgba(255, 250, 240, 0.45);
+    }
+
+    .signup input:focus, .login input:focus {
+      border-color: rgba(255, 212, 59, 0.55);
+      box-shadow: 0 0 0 3px rgba(255, 212, 59, 0.12);
     }
 
     .signup button, .login button {
       width: 80%;
-      height: 60px;
-      margin: 15px auto;
+      height: 52px;
+      margin: 16px auto 0;
       display: block;
       color: #fff;
       background: #22a707;
       text-shadow:
-      -1px -1px 0 black,
-      1px -1px 0 black,
-      -1px  1px 0 black,
-      1px  1px 0 black;  
-      font-size: 1.5em;
-      font-style: italic;
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+      font-size: 1.15em;
+      font-family: Arial, Helvetica, sans-serif;
       font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      transition: 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      transition: background 0.2s, transform 0.2s, border-color 0.2s;
       cursor: pointer;
-    }
-    #guest button{
-      width: 30%;
-      height: 30px;
-      margin: 15px auto;
-      display: block;
-      color: #fff;
-      background: #22a707;
-      text-shadow:
-      -1px -1px 0 black,
-      1px -1px 0 black,
-      -1px  1px 0 black,
-      1px  1px 0 black;  
-      font-size: 0.8em;
-      font-style: italic;
-      border: none;
-      border-radius: 5px;
-      transition: 0.2s;
-      cursor: pointer;
-    }
-    .signup button:hover, .login button:hover, #guest button:hover{
-      background:gold;
     }
 
-    /* The "switch" effect using #chk for toggling sign-up vs. login */
-    .login {
-      background: #ff0000;
-      font-style: italic;
+    #guest button {
+      width: auto;
+      min-width: 120px;
+      height: 34px;
+      margin: 14px auto 0;
+      padding: 0 16px;
+      display: block;
+      color: #ffd43b;
+      background: transparent;
+      text-shadow: none;
+      font-size: 0.82em;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 600;
+      border: 1px solid rgba(255, 212, 59, 0.35);
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+
+    .signup button:hover, .login button:hover {
+      background: #2ec412;
+      border-color: rgba(255, 212, 59, 0.35);
+      transform: translateY(-1px);
+    }
+
+    #guest button:hover {
+      background: rgba(255, 212, 59, 0.12);
+      color: #fff;
+      border-color: rgba(255, 212, 59, 0.6);
+    }
+
+    .signup {
+      background: linear-gradient(160deg, rgba(120, 18, 28, 0.96) 0%, rgba(80, 10, 18, 0.98) 100%);
       border-radius: 60% / 10%;
       transform: translateY(-170px);
       transition: 0.8s ease-in-out;
+      border-top: 1px solid rgba(255, 212, 59, 0.2);
     }
-    .login label {
-      color: gold;
+
+    .signup label {
       transform: scale(0.8);
     }
-    #chk:checked ~ .login {
+
+    #chk:checked ~ .signup {
       transform: translateY(-500px);
     }
-    #chk:checked ~ .login label {
+
+    #chk:checked ~ .signup label {
       transform: scale(1);
     }
-    #chk:checked ~ .signup label {
+
+    #chk:checked ~ .login label {
       transform: scale(0.6);
+    }
+
+    @media (max-width: 1100px) {
+      .landing-bg {
+        --asset-xl: min(26vw, 260px);
+        --asset-lg: min(22vw, 210px);
+        --asset-md: min(18vw, 170px);
+        --prop-card: min(5.5vw, 62px);
+        --prop-icon-lg: min(9vw, 85px);
+        --prop-icon-md: min(7.5vw, 72px);
+      }
+      .landing-bg-asset--dicy {
+        transform: translateX(28%) rotate(18deg);
+      }
+      @keyframes asset-float-dicy {
+        0%, 100% { transform: translateX(28%) translateY(0) rotate(var(--rot, 0deg)); }
+        50% { transform: translateX(28%) translateY(calc(var(--float-y) * -1)) rotate(calc(var(--rot, 0deg) + 2deg)); }
+      }
+      .landing-bg-prop--card3,
+      .landing-bg-prop--coins,
+      .landing-bg-prop--card1 {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .landing-bg {
+        --asset-xl: min(22vw, 150px);
+        --asset-lg: min(20vw, 130px);
+        --asset-md: min(17vw, 110px);
+        --prop-card: min(5vw, 48px);
+        --prop-icon-lg: min(8vw, 58px);
+        --prop-icon-md: min(7vw, 50px);
+        --float-y: 5px;
+      }
+      .landing-bg-asset {
+        max-width: 24vw;
+        max-height: 18vh;
+      }
+      .landing-bg-asset--poker,
+      .landing-bg-asset--dicy,
+      .landing-bg-prop--card3,
+      .landing-bg-prop--card1,
+      .landing-bg-prop--mine {
+        display: none;
+      }
+      .landing-bg-asset--mines {
+        top: auto;
+        bottom: 38%;
+        transform: rotate(-10deg);
+      }
+      @keyframes asset-float-mines {
+        0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+        50% { transform: translateY(calc(var(--float-y) * -1)) rotate(calc(var(--rot, 0deg) + 2deg)); }
+      }
+      .landing-bg-prop--card2 { top: 35%; right: 20%; bottom: auto; }
+      .landing-bg-prop--triple { bottom: 14%; right: 24%; }
+      .landing-bg-logo { width: min(95vw, 620px); opacity: 0.05; }
+      .landing-hero-logo {
+        width: min(406px, 90vw);
+        left: clamp(16px, 12vw, 48px);
+      }
     }
   </style>
 </head>
 <body>
+  <div class="landing-bg" aria-hidden="true">
+    <div class="landing-bg-base"></div>
+    <div class="landing-bg-ring landing-bg-ring--1"></div>
+    <div class="landing-bg-ring landing-bg-ring--2"></div>
+    <div class="landing-bg-ring landing-bg-ring--3"></div>
+    <img class="landing-bg-logo" src="images/logo.png" alt="">
+    <img class="landing-bg-asset landing-bg-asset--roulette" src="images/roulette.png" alt="">
+    <img class="landing-bg-asset landing-bg-asset--blackjack" src="images/blackjack.png" alt="">
+    <img class="landing-bg-asset landing-bg-asset--poker" src="images/poker.png" alt="">
+    <img class="landing-bg-asset landing-bg-asset--slot" src="images/slot1.png" alt="">
+    <img class="landing-bg-asset landing-bg-asset--dicy" src="images/dicy.png" alt="">
+    <img class="landing-bg-asset landing-bg-asset--mines" src="images/mines.png" alt="">
+    <img class="landing-bg-prop landing-bg-prop--card landing-bg-prop--card1" src="images/cards/spades_A.png" alt="">
+    <img class="landing-bg-prop landing-bg-prop--card landing-bg-prop--card2" src="images/cards/hearts_K.png" alt="">
+    <img class="landing-bg-prop landing-bg-prop--card landing-bg-prop--card3" src="images/cards/diamonds_A.png" alt="">
+    <img class="landing-bg-prop landing-bg-prop--icon landing-bg-prop--mine" src="images/boom.png" alt="">
+    <img class="landing-bg-prop landing-bg-prop--icon landing-bg-prop--coins" src="images/coins.png" alt="">
+    <img class="landing-bg-prop landing-bg-prop--icon landing-bg-prop--triple" src="images/triple_diamonds.png" alt="">
+    <span class="landing-bg-sparkle landing-bg-sparkle--1"></span>
+    <span class="landing-bg-sparkle landing-bg-sparkle--2"></span>
+    <span class="landing-bg-sparkle landing-bg-sparkle--3"></span>
+    <span class="landing-bg-sparkle landing-bg-sparkle--4"></span>
+    <span class="landing-bg-sparkle landing-bg-sparkle--5"></span>
+    <div class="landing-bg-vignette"></div>
+  </div>
+
   <video autoplay muted loop id="bgVideolog" playsinline>
     <source src="images/bodybackground.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video> 
-  <h1 id="logH1">Welcome To GAMBOQUEST</h1>
-  <p id="logp">99% Gamblers Quit Before Winning it Big</p>
-  <p id="logp">Now With GAMBOQUEST Have A Chance To Win It BIG</p>
+  </video>
 
-  <div class="main">  	
+  <div class="landing-content">
+    <img class="landing-hero-logo" src="images/logo.png" alt="GAMBOQUEST">
+
+    <div class="main">
     <!-- The checkbox toggler for the fancy flipping form: -->
     <input type="checkbox" id="chk" aria-hidden="true">
+
+    <!-- Login Form (default) -->
+    <div class="login">
+      <form onsubmit="handleLogin(event)">
+        <label for="chk" aria-hidden="true">Log in</label>
+        <br>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Log in</button>
+        <div id="guest">
+        <button type="button" onclick="userGuestLogin()">Guest Login</button>
+        </div>
+      </form>
+    </div>
 
     <!-- Sign Up Form -->
     <div class="signup">
@@ -197,24 +595,8 @@
         <input type="email" id="signupEmail" placeholder="Email" required>
         <input type="password" id="signupPassword" placeholder="Password" required>
         <button type="submit">Sign up</button>
-        <div id="guest">
-        <button onclick="userGuestLogin()">Guest Login</button>
-        </div>
       </form>
     </div>
-
-    <!-- Login Form -->
-    <div class="login">
-      <form onsubmit="handleLogin(event)">
-        <label for="chk" aria-hidden="true">Log in</label>
-        <br>
-        <input type="email" id="loginEmail" placeholder="Email" required>
-        <input type="password" id="loginPassword" placeholder="Password" required>
-        <button type="submit">Log in</button>
-        <div id="guest">
-        <button onclick="userGuestLogin()">Guest Login</button>
-        </div>
-      </form>
     </div>
   </div>
 

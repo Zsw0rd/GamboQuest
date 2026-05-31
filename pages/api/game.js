@@ -1,9 +1,23 @@
 import { getAuthenticatedUser, getAccessToken } from '../../lib/supabase'
 import { handleGameAction } from '../../lib/games/engine'
+import { rejectIfRateLimited } from '../../lib/rate-limit'
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '16kb',
+    },
+  },
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST')
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  if (rejectIfRateLimited(req, res, { name: 'game', limit: 120, windowMs: 60 * 1000 })) {
+    return
   }
 
   const accessToken = getAccessToken(req)
@@ -32,7 +46,18 @@ export default async function handler(req, res) {
     return res.status(200).json(result)
   } catch (err) {
     const message = err.message || 'Game error'
-    const status = message.includes('Insufficient') || message.includes('Invalid')
+    const isClientError = [
+      'Insufficient',
+      'Invalid',
+      'Unknown',
+      'Place',
+      'already',
+      'expired',
+      'not found',
+      'Reveal',
+      'limited',
+    ].some((text) => message.includes(text))
+    const status = isClientError
       ? 400
       : 500
     if (status === 500) console.error('Game API error:', message)

@@ -6,7 +6,7 @@ function toggleBlackjackAudio() {
   blackjackAudioEnabled = !blackjackAudioEnabled;
   const icon = document.getElementById('bjAudioToggle');
   if (!icon) return;
-  icon.textContent = blackjackAudioEnabled ? '🔊' : '🔇';
+  icon.textContent = blackjackAudioEnabled ? AUDIO_ON_ICON : AUDIO_OFF_ICON;
   icon.style.color = blackjackAudioEnabled ? 'gold' : 'red';
 }
 
@@ -21,7 +21,7 @@ function bjEnableBetButtons() {
 function bjRenderHand(hand, containerId, hideFirst = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
-  container.innerHTML = '';
+  container.replaceChildren();
   hand.forEach((card, i) => {
     const el = document.createElement('div');
     el.className = 'card';
@@ -49,13 +49,13 @@ async function bjAnimateDeal(playerHand, dealerHand) {
   bjRenderHand([], 'dealerCards');
 
   await delay(400);
-  bjRenderHand([dealerHand[0]], 'dealerCards', true);
+  bjRenderHand([dealerHand[0]], 'dealerCards');
   playSfx('sfx/cardsDrawnsfx.mp3', blackjackAudioEnabled);
   await delay(500);
   bjRenderHand(playerHand.slice(0, 1), 'playerCards');
   playSfx('sfx/cardsDrawnsfx.mp3', blackjackAudioEnabled);
   await delay(500);
-  bjRenderHand(dealerHand.slice(0, 1), 'dealerCards', true);
+  bjRenderHand(dealerHand.slice(0, 1), 'dealerCards');
   playSfx('sfx/cardsDrawnsfx.mp3', blackjackAudioEnabled);
   await delay(500);
   bjRenderHand(playerHand, 'playerCards');
@@ -65,7 +65,7 @@ async function bjAnimateDeal(playerHand, dealerHand) {
 async function blackJackPlaceBet(amount) {
   if (bjSessionId) return;
   const balance = getStoredBalance();
-  if (balance < amount) { alert('Insufficient balance!'); return; }
+  if (balance < amount) { showErrorPopup('Insufficient balance!'); return; }
 
   bjBet = amount;
   bjDisableBetButtons();
@@ -74,7 +74,7 @@ async function blackJackPlaceBet(amount) {
 
   const result = await playGame({ game: 'blackjack', action: 'start', bet: amount });
   if (result.error) {
-    alert(result.error);
+    showErrorPopup(result.error);
     bjEnableBetButtons();
     return;
   }
@@ -97,7 +97,11 @@ async function blackJackHit() {
   if (!bjSessionId) return;
   document.getElementById('hitButton').disabled = true;
   const result = await playGame({ game: 'blackjack', action: 'hit', sessionId: bjSessionId });
-  if (result.error) { alert(result.error); return; }
+  if (result.error) {
+    showErrorPopup(result.error);
+    document.getElementById('hitButton').disabled = false;
+    return;
+  }
 
   playSfx('sfx/cardsDrawnsfx.mp3', blackjackAudioEnabled);
   bjRenderHand(result.playerHand, 'playerCards');
@@ -118,7 +122,12 @@ async function blackJackStand() {
   document.getElementById('gameMessage').textContent = 'Dealer plays...';
 
   const result = await playGame({ game: 'blackjack', action: 'stand', sessionId: bjSessionId });
-  if (result.error) { alert(result.error); return; }
+  if (result.error) {
+    showErrorPopup(result.error);
+    document.getElementById('hitButton').disabled = false;
+    document.getElementById('standButton').disabled = false;
+    return;
+  }
 
   const dealerHand = result.dealerHand;
   let shown = [dealerHand[0]];
@@ -140,7 +149,7 @@ function bjEndRound(result) {
     msg.textContent = `You win! +$${result.payout}`;
     playSfx('sfx/winsfx.mp3', blackjackAudioEnabled);
   } else if (result.result === 'tie') {
-    msg.textContent = `Push — bet returned ($${result.payout})`;
+    msg.textContent = `Push - bet returned ($${result.payout})`;
   } else {
     msg.textContent = 'You lose!';
     playSfx('sfx/slotLosesfx.mp3', blackjackAudioEnabled);

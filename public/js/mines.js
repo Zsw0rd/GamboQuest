@@ -7,7 +7,7 @@ function toggleSweepAudio() {
   sweepAudioEnabled = !sweepAudioEnabled;
   const icon = document.getElementById('sweepAudioToggle');
   if (!icon) return;
-  icon.textContent = sweepAudioEnabled ? '🔊' : '🔇';
+  icon.textContent = sweepAudioEnabled ? AUDIO_ON_ICON : AUDIO_OFF_ICON;
   icon.style.color = sweepAudioEnabled ? 'gold' : 'red';
 }
 
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function minesSetupGrid() {
     if (!minesGridEl) return;
-    minesGridEl.innerHTML = '';
+    minesGridEl.replaceChildren();
     for (let i = 0; i < MINES_GRID; i++) {
       const cell = document.createElement('div');
       cell.classList.add('mines-cell');
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const result = await playGame({ game: 'mines', action: 'start', bet: userBet, numBombs });
     if (result.error) {
-      alert(result.error);
+      showErrorPopup(result.error);
       minesStartBtn.disabled = false;
       return;
     }
@@ -72,7 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!minesGameActive || !minesSessionId) return;
     const cell = e.target;
     const cellIndex = parseInt(cell.dataset.index, 10);
-    if (cell.classList.contains('minesRevealedSafe') || cell.classList.contains('minesRevealedBomb')) return;
+    if (
+      cell.classList.contains('mines-loading') ||
+      cell.classList.contains('minesRevealedSafe') ||
+      cell.classList.contains('minesRevealedBomb')
+    ) return;
 
     cell.classList.add('mines-loading');
     const result = await playGame({
@@ -83,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     cell.classList.remove('mines-loading');
 
-    if (result.error) { alert(result.error); return; }
+    if (result.error) { showErrorPopup(result.error); return; }
 
     if (result.isBomb) {
       cell.classList.add('minesRevealedBomb');
@@ -121,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!minesGameActive || !minesSessionId) return;
     minesCashoutBtn.disabled = true;
     const result = await playGame({ game: 'mines', action: 'cashout', sessionId: minesSessionId });
-    if (result.error) { alert(result.error); minesCashoutBtn.disabled = false; return; }
+    if (result.error) { showErrorPopup(result.error); minesCashoutBtn.disabled = false; return; }
     minesRevealAll(result.bombPositions);
     minesMessageEl.textContent = `Cashed out! You won $${result.payout}!`;
     playSweepSfx('sfx/betprsfx.mp3');

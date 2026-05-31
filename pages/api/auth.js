@@ -6,6 +6,15 @@ import {
   getAccessToken,
   validateSignupInput,
 } from '../../lib/supabase'
+import { rejectIfRateLimited } from '../../lib/rate-limit'
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '16kb',
+    },
+  },
+}
 
 function authResponse(session, profile) {
   return {
@@ -19,7 +28,12 @@ function authResponse(session, profile) {
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST')
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  if (rejectIfRateLimited(req, res, { name: 'auth', limit: 20, windowMs: 60 * 1000 })) {
+    return
   }
 
   const { action, username, email, password, refreshToken } = req.body

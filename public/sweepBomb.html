@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sweep Bombs - Gambo</title>
   <link rel="icon" type="image/jpg" href="images/logo.png">
   <link rel="preload" href="gambo.css" as="style">
@@ -11,16 +12,18 @@
   <style>
     #minesContainer {
       margin: 20px auto;
-      padding: 20px;
-      width: 75vw;
+      padding: clamp(14px, 2.4vw, 20px);
+      width: min(94vw, 1200px);
       max-width: 1200px;
-      background-color: #222;  
-      border-radius: 10px;
+      background-color: rgba(34, 34, 34, 0.84);
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 20px;
+      backdrop-filter: blur(2px);
     }
 
     #minesContainer h1 {
@@ -78,14 +81,18 @@
 
     .mines-grid {
       display: grid;
-      grid-template-columns: repeat(5, 90px);
-      grid-gap: 10px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: clamp(6px, 2vw, 10px);
+      width: 100%;
+      max-width: 490px;
     }
 
     .mines-cell {
-      width: 90px;
-      height: 90px;
-      background-color: #333;
+      width: 100%;
+      min-width: 0;
+      aspect-ratio: 1;
+      height: auto;
+      background-color: rgba(51, 51, 51, 0.92);
       border-radius: 5px;
       cursor: pointer;
       user-select: none;
@@ -144,9 +151,33 @@
       vertical-align: middle;
       color: gold;
     }
+
+    @media (max-width: 700px) {
+      #minesContainer {
+        margin-left: 6px;
+        margin-right: 6px;
+        width: calc(100vw - 12px);
+        max-width: 378px;
+      }
+
+      .mines-grid {
+        width: 100%;
+        max-width: 346px;
+        gap: 6px;
+      }
+
+      .mines-info {
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 <body>
+  <video autoplay muted loop id="bgVideo" playsinline>
+    <source src="images/bodybackground.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
   <header>
     <a href="gamindex.html" class="logo">
       <img src="images/logo.png" alt="Gambo Logo" width="40" height="40">
@@ -160,7 +191,7 @@
   <main>
     <div id="minesContainer">
       <h1> Sweep Bombs
-        <span id="sweepAudioToggle" onclick="toggleSweepAudio()" title="Toggle Sound">🔊</span>
+        <span id="sweepAudioToggle" onclick="toggleSweepAudio()" title="Toggle Sound">&#128266;</span>
       </h1>
       
 
@@ -198,7 +229,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>© 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
+    <p>&copy; 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
   </footer>
 </body>
 </html>

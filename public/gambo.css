@@ -1,3 +1,18 @@
+:root {
+    --surface: rgba(31, 31, 31, 0.94);
+    --surface-soft: rgba(54, 54, 54, 0.92);
+    --surface-raised: rgba(70, 70, 70, 0.92);
+    --accent: #ffd43b;
+    --accent-strong: #22a707;
+    --danger: #e5484d;
+    --text: #fffaf0;
+    --muted: #d8d8d8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -5,14 +20,15 @@ html, body {
   }
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background-color: #1a1a1a;
-    color: #fff;
+    color: var(--text);
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: center;
     min-height: 100vh;
+    line-height: 1.5;
 }
 main {
     flex: 1; 
@@ -23,13 +39,12 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit:fill;
+    object-fit: cover;
     z-index: -1;
   }
 .logo img {
-    padding-left: 10%;
-    width: 190px;
-    height: 125px;
+    width: clamp(86px, 12vw, 160px);
+    height: auto;
     cursor: pointer;
 }  
 header {
@@ -37,19 +52,20 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 10px 20px;
-    background-color: #333;
+    gap: 16px;
+    padding: 12px clamp(14px, 3vw, 36px);
+    background: rgba(35, 35, 35, 0.92);
+    border-bottom: 1px solid rgba(255, 212, 59, 0.22);
     position: relative;
     top: 0;
     left: 0;
     z-index: 1000;
-    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+    flex-wrap: wrap;
 }
 
 header h1 {
-    padding-left:7.5%;
-    font-size: 75px;
-    color:gold;
+    font-size: clamp(36px, 7vw, 72px);
+    color: var(--accent);
     text-shadow:
       -1px -1px 0 black,
       1px -1px 0 black,
@@ -57,121 +73,120 @@ header h1 {
       2px  2px 0 black; 
     margin: 0;
     text-align: center;
+    letter-spacing: 0;
 }
 
 .search-container{
-    margin-top:10px;
+    margin:18px auto 0;
     width: 100%;
     display:flex;   
-    justify-content: left;
-    padding-left:15%;
+    justify-content: center;
     align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 #searchBar {
-    border-radius:10px;
-    width: 500px;
-    padding: 8px;
+    border-radius:8px;
+    width: min(92vw, 520px);
+    padding: 11px 12px;
     font-size: 16px;
+    border: 1px solid rgba(255, 212, 59, 0.35);
+    background: rgba(20, 20, 20, 0.88);
+    color: var(--text);
     
 }
 .balance-section {
-    display: relative;
-    padding-right:2%;
+    display: flex;
     flex-direction: column;
     align-items: flex-end;
+    gap: 8px;
 }
 
 #balance {
-    font-size: 18px;
-    background: #444;
-    padding: 5px 10px;
-    border-radius: 5px;
-    margin-bottom: 5px;
+    font-size: 16px;
+    background: var(--surface-raised);
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .transaction-buttons {
-    display: relative;
+    display: flex;
     gap: 10px;
 }
 
-.transaction-buttons button {
+.transaction-buttons button,
+.logout button,
+button {
     background-color: #444;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 12px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
+    transition: background 0.2s, transform 0.2s, border-color 0.2s;
 }
 
-.transaction-buttons button:hover {
+.transaction-buttons button:hover,
+.logout button:hover,
+button:hover {
     background-color: #555;
+    border-color: rgba(255, 212, 59, 0.35);
 }
 .logout {
-    padding-top:1%;
-    display: relative;
+    display: flex;
     gap: 10px;
 }
-
-.logout button {
-    background-color: #444;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.logout button:hover {
-    background-color: #555;
-}
 .container {
-    margin-top: 25px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap:75px;
-    width:100%;
+    margin: 28px auto 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(18px, 4vw, 42px);
+    width:min(94vw, 1320px);
   }
   
 .slotcard {
-    width: 425px;
+    width: 100%;
     aspect-ratio: 65/83;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
     cursor: pointer;
-    transition: transform 0.3s;
-    background-color:rgba(32, 32, 32, 0.993);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    background-color: var(--surface);
+    border: 1px solid rgba(255, 212, 59, 0.18);
 }
 .slot-info {
     padding: 10px;
     text-align: center;
 }
 .slot-info h2{
-    font-size:35px;
+    font-size: clamp(22px, 4vw, 34px);
     text-shadow:
       -1px -1px 0 black,
       1px -1px 0 black,
       -1px  1px 0 black,
       1px  1px 0 black; 
+    margin: 8px 0;
 }
 .slotcard:hover {
-    transform: scale(1.05);
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.42);
+    border-color: rgba(255, 212, 59, 0.48);
 }
 .slotcard img {
     content-visibility: auto;
     contain-intrinsic-size: 200px 150px;
     width: 100%;
-    height: 410px;
+    height: 78%;
     object-fit: cover;
 }
 .site-footer {
     margin-top: 40px;
     width: 100%;
-    background-color: #333;
-    color: gold;
+    background-color: rgba(35, 35, 35, 0.94);
+    color: var(--accent);
     text-align: center;
     text-shadow:
     -1px -1px 0 black,
@@ -186,4 +201,75 @@ header h1 {
     bottom: 0;
     left: 0;
     z-index: 1000;
+}
+
+.site-footer p {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.popup-root {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(360px, calc(100vw - 36px));
+    z-index: 10000;
+}
+
+.gambo-popup {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 12px 12px 14px;
+    border-radius: 8px;
+    color: #fff;
+    background: rgba(28, 28, 28, 0.96);
+    border-left: 4px solid var(--accent);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.18s, transform 0.18s;
+}
+
+.gambo-popup-success {
+    border-left-color: var(--accent-strong);
+}
+
+.gambo-popup-error {
+    border-left-color: var(--danger);
+}
+
+.gambo-popup.is-hiding {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+.gambo-popup-close {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    padding: 0;
+    line-height: 1;
+    border-radius: 8px;
+}
+
+@media (max-width: 720px) {
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .balance-section {
+        align-items: center;
+        width: 100%;
+    }
+
+    .transaction-buttons,
+    .logout {
+        justify-content: center;
+    }
 }

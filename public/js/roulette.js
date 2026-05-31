@@ -4,7 +4,7 @@ function toggleRouletteAudio() {
   rouletteAudioEnabled = !rouletteAudioEnabled;
   const icon = document.getElementById('rouletteAudioToggle');
   if (!icon) return;
-  icon.textContent = rouletteAudioEnabled ? '🔊' : '🔇';
+  icon.textContent = rouletteAudioEnabled ? AUDIO_ON_ICON : AUDIO_OFF_ICON;
   icon.style.color = rouletteAudioEnabled ? 'gold' : 'red';
 }
 
@@ -27,14 +27,15 @@ function initRouletteGame() {
   window.selectCoin = function (el) {
     document.querySelectorAll('.coin-img').forEach((ci) => ci.classList.remove('coin-selected'));
     el.classList.add('coin-selected');
-    selectedCoinValue = parseInt(el.dataset.amount, 10);
+    const amount = parseInt(el.dataset.amount, 10);
+    if (Number.isSafeInteger(amount) && amount > 0) selectedCoinValue = amount;
   };
 
   window.placeBet = function (spot) {
-    if (isSpinning) { alert('Cannot place bets while spinning!'); return; }
+    if (isSpinning) { showErrorPopup('Cannot place bets while spinning!'); return; }
     const pending = Object.values(bets).reduce((a, b) => a + b, 0);
     const balance = getStoredBalance();
-    if (balance < pending + selectedCoinValue) { alert('Insufficient balance!'); return; }
+    if (balance < pending + selectedCoinValue) { showErrorPopup('Insufficient balance!'); return; }
     if (!bets[spot]) bets[spot] = 0;
     bets[spot] += selectedCoinValue;
     if (rouletteMessage) {
@@ -54,7 +55,7 @@ function initRouletteGame() {
     if (isSpinning) return;
     let totalBet = 0;
     for (const k in bets) totalBet += bets[k];
-    if (totalBet <= 0) { alert('Place a bet first!'); return; }
+    if (totalBet <= 0) { showErrorPopup('Place a bet first!'); return; }
 
     isSpinning = true;
     if (spinBtn) spinBtn.disabled = true;
@@ -71,7 +72,7 @@ function initRouletteGame() {
     ]);
 
     if (result.error) {
-      alert(result.error);
+      showErrorPopup(result.error);
       isSpinning = false;
       if (spinBtn) spinBtn.disabled = false;
       if (clearBtn) clearBtn.disabled = false;
@@ -101,6 +102,50 @@ function initRouletteGame() {
         }
       }, 1200);
     }, 6000);
+  };
+
+  window.showBetInfo = function () {
+    const overlay = document.getElementById('betsInfoOverlay');
+    const list = document.getElementById('betsList');
+    if (!overlay || !list) return;
+
+    list.replaceChildren();
+    const entries = Object.entries(bets);
+    if (entries.length === 0) {
+      const empty = document.createElement('p');
+      empty.textContent = 'No active bets yet.';
+      list.appendChild(empty);
+    } else {
+      const ul = document.createElement('ul');
+      entries.forEach(([spot, amount]) => {
+        const li = document.createElement('li');
+        li.textContent = `${spot}: $${amount}`;
+        ul.appendChild(li);
+      });
+      list.appendChild(ul);
+    }
+
+    overlay.style.display = 'block';
+  };
+
+  window.closeBetInfo = function () {
+    const overlay = document.getElementById('betsInfoOverlay');
+    if (overlay) overlay.style.display = 'none';
+  };
+
+  window.hoverInside = function (el, active) {
+    if (el) el.classList.toggle('highlighted', Boolean(active));
+  };
+
+  window.hoverOutside = function (key, active) {
+    document.querySelectorAll('.bet-image, .bet-outside, .bet-zero').forEach((el) => {
+      const match = el.dataset.outside === key ||
+        el.dataset.range === key ||
+        el.dataset.dozen === key ||
+        el.dataset.color === key ||
+        el.dataset.evenodd === key;
+      if (match) el.classList.toggle('highlighted', Boolean(active));
+    });
   };
 }
 

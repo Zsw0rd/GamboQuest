@@ -77,13 +77,15 @@
         }
         .card-container {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-top: 10px;
         }
 
         .card {
-            width: 200px;   
-            height: 280px; 
+            width: clamp(82px, 15vw, 200px);   
+            aspect-ratio: 5 / 7;
+            height: auto; 
             background-size: cover;
             background-position: center;
             border-radius: 5px;
@@ -118,7 +120,7 @@
                 <h1>BlackJack
                   <!-- Audio toggle icon -->
                   <span id="bjAudioToggle" onclick="toggleBlackjackAudio()" title="Toggle Sound">
-                    🔊
+                    &#128266;
                   </span>
                 </h1>
               </center>              
@@ -146,7 +148,7 @@
         </div>
     </main>
     <footer class="site-footer">
-        <p>© 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
+        <p>&copy; 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
     </footer>
 </body>
 </html>

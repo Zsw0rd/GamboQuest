@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dice Game - Gambo</title>
   <link rel="icon" type="image/jpg" href="images/logo.png">
   <link rel="preload" href="gambo.css" as="style">
@@ -10,16 +11,19 @@
   <script defer src="js/dice.js"></script>
   <style>
     .dice-container {
-      flex: 1; 
+      flex: 1;
+      width: min(94vw, 1000px);
       display: flex;
       flex-wrap: wrap;
       margin: 30px auto;
-      padding: 20px;
+      padding: clamp(14px, 2.4vw, 20px);
       max-width: 1000px;
-      background: #2a2a2a;
-      border-radius: 10px;
+      background: rgba(42, 42, 42, 0.84);
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.5);
       gap: 20px;
+      backdrop-filter: blur(2px);
     }
     .dice-container h1 {
       flex: 0 0 100%;
@@ -34,7 +38,7 @@
     }
     .dice-controls {
       flex: 0 0 240px;
-      background: #3a3a3a;
+      background: rgba(58, 58, 58, 0.88);
       border-radius: 8px;
       padding: 15px;
       display: flex;
@@ -42,14 +46,18 @@
       gap: 15px;
     }
     .dice-controls h2 { font-size: 20px; }
-    .input-row { display: static;       
+    .input-row {
+      min-width: 0;
+      display: flex;
       flex-direction: column;
-       gap: 5px; 
-      }
+      gap: 5px;
+    }
     .input-row label { 
       font-size: 14px; 
     }
     .input-row input {
+      width: 100%;
+      min-height: 38px;
       padding: 8px;
       border: 1px solid #444;
       border-radius: 5px;
@@ -73,7 +81,8 @@
     /* Right: Dice panel */
     .dice-panel {
       flex: 1 1 0;
-      background: #3a3a3a;
+      min-width: 0;
+      background: rgba(58, 58, 58, 0.88);
       border-radius: 8px;
       padding: 15px;
       display: flex;
@@ -90,11 +99,13 @@
       display: flex;
       gap: 10px;
       align-items: center;
+      flex-wrap: wrap;
     }
     /* Slider container */
     .slider-container {
     position: relative;
-    width: 100%;
+    flex: 1 1 260px;
+    min-width: 180px;
     height: 50px;
     display: flex;
     align-items: center;  /* vertically center content */
@@ -116,7 +127,7 @@
     width: 100%;
     height: 30px;
     background: transparent;
-    appearance:static;
+    appearance: none;
     -webkit-appearance: none;
     z-index: 2;
     }
@@ -134,11 +145,14 @@
     }
     /* Fields row (Roll, Chance, Multiplier) */
     .fields-row { 
-      display: flex; 
-      gap: 15px; 
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+      align-items: end;
     }
     .fields-row .input-row { 
-      flex: 1; }
+      justify-content: end;
+    }
     
     /* Message boxes */
     #rollMessage { 
@@ -154,6 +168,7 @@
 
     /* Roll Toggle Button */
     #rollToggleBtn {
+      min-width: 112px;
       padding: 6px 10px;
       border-radius: 4px;
       border: 1px solid #444;
@@ -173,9 +188,44 @@
       vertical-align: middle;
       color: gold; /* default ON color */
      }
+
+     @media (max-width: 720px) {
+      .dice-container {
+        width: min(96vw, 1000px);
+        flex-direction: column;
+      }
+
+      .dice-controls,
+      .dice-panel {
+        flex: 1 1 auto;
+        width: 100%;
+      }
+
+      .fields-row {
+        grid-template-columns: 1fr;
+      }
+
+      .top-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .slider-container {
+        min-width: 0;
+      }
+
+      #rollToggleBtn {
+        width: 100%;
+      }
+     }
   </style>
 </head>
 <body>
+  <video autoplay muted loop id="bgVideo" playsinline>
+    <source src="images/bodybackground.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
   <header>
     <a href="gamindex.html" class="logo">
       <img src="images/logo.png" alt="Website Logo" width="40" height="40">
@@ -191,7 +241,7 @@
     <div class="dice-container">
       <h1>Dicy
         <!-- Audio toggle icon -->
-        <span id="diceAudioToggle" onclick="toggleDiceAudio()" title="Toggle Sound"> 🔊 </span>
+        <span id="diceAudioToggle" onclick="toggleDiceAudio()" title="Toggle Sound">&#128266;</span>
       </h1>
       <div class="dice-controls">
         <h2>Bet</h2>
@@ -221,7 +271,6 @@
         <div class="fields-row">
           <div class="input-row">
             <label for="diceRoll">Roll</label>
-            <br>
             <input type="number" id="diceRoll" step="1" value="50" />
           </div>
           <div class="input-row">
@@ -239,8 +288,8 @@
     </div>
   </main>
 
-  <footer class="site-footer" style="background:#333; padding: 10px; text-align:center;">
-    <p>© 2025 GAMBO. All rights reserved.</p>
+  <footer class="site-footer" style="background:rgba(35,35,35,0.94); padding: 10px; text-align:center;">
+    <p>&copy; 2025 GAMBO. All rights reserved.</p>
   </footer>
 </body>
 </html>

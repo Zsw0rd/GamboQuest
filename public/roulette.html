@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Roulette - Gambo</title>
   <link rel="icon" type="image/png" href="images/logo.png">
   <link rel="preload" href="gambo.css" as="style">
@@ -37,8 +38,9 @@
     /* Table Container */
     .table-container {
       position: relative;
-      width: 1000px;
-      height: 700px;
+      width: min(1000px, 94vw);
+      aspect-ratio: 10 / 7;
+      height: auto;
       margin: 0 auto;
       overflow: hidden;
     }
@@ -68,7 +70,8 @@
       position: absolute;
       top: 12.5%;
       left: 2%;
-      width: 160px;
+      width: 16%;
+      max-width: 160px;
       transform: rotate(90deg);
       pointer-events: auto;
       transition: transform 0.2s;
@@ -85,7 +88,8 @@
       pointer-events: auto;
     }
     .bet-image {
-      width: 65px;
+      width: 100%;
+      max-width: 65px;
       height: auto;
       cursor: pointer;
       transition: transform 0.2s;
@@ -106,13 +110,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 15px;
+      gap: clamp(4px, 1.5vw, 15px);
       pointer-events: none;
       z-index: 4;
     }
     .bet-outside {
       pointer-events: auto;
-      width: 85px;
+      width: 8.5%;
+      max-width: 85px;
       height: auto;
       cursor: pointer;
       transition: transform 0.2s;
@@ -128,8 +133,9 @@
       bottom: 2%;
       left: 50%;
       transform: translateX(-50%);
-      width: 375px;
-      height: 375px;
+      width: min(375px, 40%);
+      aspect-ratio: 1;
+      height: auto;
       z-index: 2;
     }
     #rouletteWheel {
@@ -279,7 +285,7 @@
       <h1>Roulette
         <!-- Audio toggle icon -->
         <span
-          id="rouletteAudioToggle" onclick="toggleRouletteAudio()" title="Toggle Sound">🔊</span>
+          id="rouletteAudioToggle" onclick="toggleRouletteAudio()" title="Toggle Sound">&#128266;</span>
       </h1>
       
 
@@ -438,7 +444,7 @@
   </div>
 
   <footer class="site-footer">
-    <p>© 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
+    <p>&copy; 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
   </footer>
 
 

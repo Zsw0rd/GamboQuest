@@ -11,16 +11,18 @@
   <script defer src="js/poker.js"></script>
   <style>
     #pokerGame {
-      margin: 20px auto; 
-      padding: 20px;
-      width: 85vw;       
+      margin: 20px auto;
+      padding: clamp(12px, 2vw, 20px);
+      width: min(94vw, 1500px);
       max-width: 1500px; 
-      background-color: #222; 
-      border-radius: 10px;
+      background-color: rgba(34, 34, 34, 0.84);
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
+      backdrop-filter: blur(2px);
     }
     
     #pokerGame h1 {
@@ -36,13 +38,15 @@
 
     .poker-container {
       position: relative;
-      width: 80%;
+      width: min(100%, 1200px);
       max-width: 1200px;
       margin: 0 auto;
       height: auto;
       display: flex;
       justify-content: center;
       align-items: center;
+      --card-width: clamp(24px, 5.2vw, 65px);
+      --card-gap: clamp(3px, 0.8vw, 10px);
     }
     #poker-table {
       width: 100%;
@@ -56,24 +60,31 @@
       top: 15%;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 20px;
+      width: max-content;
+      max-width: 76%;
+      font-size: clamp(11px, 1.9vw, 20px);
       background: rgba(0,0,0,0.7);
       color: white;
-      padding: 5px 15px;
-      border-radius: 5px;
+      padding: 5px clamp(8px, 1.5vw, 15px);
+      border-radius: 8px;
+      text-align: center;
+      line-height: 1.2;
     }
     #pot-value {
       position: absolute;
       top: 35%;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 22px;
+      font-size: clamp(13px, 2.1vw, 22px);
       font-weight: bold;
       color: white;
     }
     .card {
-      width: 65px;
+      width: var(--card-width);
+      aspect-ratio: 5 / 7;
       height: auto;
+      display: block;
+      filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.45));
     }
     .hidden {
       opacity: 0;
@@ -84,6 +95,8 @@
       bottom: 10%;
       left: 50%;
       transform: translateX(-50%);
+      display: flex;
+      gap: var(--card-gap);
     }
 
     .community-cards {
@@ -92,7 +105,8 @@
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 10px;
+      gap: var(--card-gap);
+      max-width: 88%;
     }
 
     .bot-container {
@@ -100,21 +114,34 @@
       text-align: center;
       color: white;
       font-weight: bold;
+      font-size: clamp(11px, 1.6vw, 16px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .bot-left {
       top: 28%;
       left: 20%;
+      transform: translateX(-50%);
     }
     .bot-right {
       top: 28%;
-      right: 20%;
+      left: 80%;
+      right: auto;
+      transform: translateX(-50%);
     }
     .bot-name {
-      margin-bottom: 5px;
+      margin-bottom: clamp(2px, 0.6vw, 5px);
+    }
+    .bot-cards {
+      display: flex;
+      gap: var(--card-gap);
+      justify-content: center;
     }
 
     .buttons {
-      margin-top: 20px;
+      width: 100%;
+      margin-top: clamp(12px, 2vw, 20px);
       display: flex;
       gap: 10px;
       justify-content: center;
@@ -133,6 +160,8 @@
     .bet-buttons {
       display: flex;
       gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     .bet-buttons button {
       padding: 10px;
@@ -157,6 +186,92 @@
       color: gold;
 
     }
+
+    @media (max-width: 700px) {
+      #pokerGame {
+        margin-left: 5px;
+        margin-right: 5px;
+        width: calc(100vw - 10px);
+        max-width: 380px;
+      }
+
+      .poker-container {
+        width: calc(100vw - 36px);
+        max-width: 354px;
+        --card-width: clamp(22px, 6vw, 36px);
+        --card-gap: 3px;
+      }
+
+      #game-message {
+        top: 8%;
+      }
+
+      #pot-value {
+        top: 32%;
+      }
+
+      .bot-left,
+      .bot-right {
+        top: 13%;
+      }
+
+      .bot-left {
+        left: 31%;
+      }
+
+      .bot-right {
+        left: 69%;
+        right: auto;
+      }
+
+      .community-cards {
+        top: 50%;
+      }
+
+      .player-cards {
+        bottom: 6%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .poker-container {
+        --card-width: clamp(20px, 6.6vw, 30px);
+        --card-gap: 2px;
+      }
+
+      #game-message {
+        top: 5%;
+        max-width: 82%;
+      }
+
+      #pot-value {
+        top: 31%;
+      }
+
+      .bot-left,
+      .bot-right {
+        top: 12%;
+      }
+
+      .bot-left {
+        left: 31%;
+      }
+
+      .bot-right {
+        left: 69%;
+        right: auto;
+      }
+
+      .community-cards {
+        top: 51%;
+      }
+
+      .buttons button {
+        flex: 1 1 86px;
+        padding-inline: 10px;
+        font-size: 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -178,7 +293,7 @@
   <div id="pokerGame">
     <h1>Poker
       <!-- Audio toggle icon -->
-      <span id="pokerAudioToggle" onclick="togglePokerAudio()" title="Toggle Sound">🔊</span>
+      <span id="pokerAudioToggle" onclick="togglePokerAudio()" title="Toggle Sound">&#128266;</span>
     </h1>
     
     <br>
@@ -207,7 +322,7 @@
       <!-- Bot 1 -->
       <div class="bot-container bot-left">
         <div id="bot1-name" class="bot-name">Bot 1</div>
-        <div>
+        <div class="bot-cards">
           <img id="bot1-card-1" class="card" src="images/cards/back_card.png">
           <img id="bot1-card-2" class="card" src="images/cards/back_card.png">
         </div>
@@ -215,7 +330,7 @@
       <!-- Bot 2 -->
       <div class="bot-container bot-right">
         <div id="bot2-name" class="bot-name">Bot 2</div>
-        <div>
+        <div class="bot-cards">
           <img id="bot2-card-1" class="card" src="images/cards/back_card.png">
           <img id="bot2-card-2" class="card" src="images/cards/back_card.png">
         </div>
@@ -232,7 +347,7 @@
   </div>
   </main>
   <footer class="site-footer">
-    <p>© 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
+    <p>&copy; 2025 GAMBO by Team ZSw0rD. All rights reserved.</p>
   </footer>
 </body>
 </html>

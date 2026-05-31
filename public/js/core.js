@@ -1,4 +1,55 @@
-/* Gambo core: auth, wallet, game API, performance utilities */
+/* Gambo core: auth, wallet, game API, popups, performance utilities */
+
+const AUDIO_ON_ICON = '\u{1F50A}';
+const AUDIO_OFF_ICON = '\u{1F507}';
+
+function ensurePopupRoot() {
+  let root = document.getElementById('gamboPopupRoot');
+  if (root) return root;
+
+  root = document.createElement('div');
+  root.id = 'gamboPopupRoot';
+  root.className = 'popup-root';
+  root.setAttribute('aria-live', 'polite');
+  root.setAttribute('aria-atomic', 'false');
+  document.body.appendChild(root);
+  return root;
+}
+
+function showPopup(message, type = 'info', timeout = 4200) {
+  const root = ensurePopupRoot();
+  const popup = document.createElement('div');
+  const cleanType = ['success', 'error', 'info'].includes(type) ? type : 'info';
+  popup.className = `gambo-popup gambo-popup-${cleanType}`;
+  popup.setAttribute('role', cleanType === 'error' ? 'alert' : 'status');
+
+  const text = document.createElement('span');
+  text.textContent = String(message || 'Something happened.');
+
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'gambo-popup-close';
+  close.setAttribute('aria-label', 'Dismiss message');
+  close.textContent = 'x';
+
+  const dismiss = () => {
+    popup.classList.add('is-hiding');
+    window.setTimeout(() => popup.remove(), 180);
+  };
+  close.addEventListener('click', dismiss);
+
+  popup.append(text, close);
+  root.appendChild(popup);
+  window.setTimeout(dismiss, timeout);
+}
+
+function showErrorPopup(message) {
+  showPopup(message, 'error');
+}
+
+function showSuccessPopup(message) {
+  showPopup(message, 'success');
+}
 
 function storeAuthSession(data) {
   localStorage.setItem('accessToken', data.accessToken);
@@ -132,9 +183,9 @@ async function userSignupWithEmail(username, email, password) {
     body: JSON.stringify({ action: 'signup', username, email, password }),
   });
   const data = await res.json();
-  if (!res.ok) { alert(data.error || 'Signup failed'); return false; }
+  if (!res.ok) { showErrorPopup(data.error || 'Signup failed'); return false; }
   if (data.requiresEmailConfirmation) {
-    alert(data.message || 'Check your email to confirm your account.');
+    showPopup(data.message || 'Check your email to confirm your account.', 'info');
     return false;
   }
   storeAuthSession(data);
@@ -148,7 +199,7 @@ async function userLoginWithEmail(email, password) {
     body: JSON.stringify({ action: 'login', email, password }),
   });
   const data = await res.json();
-  if (!res.ok) { alert(data.error || 'Login failed'); return false; }
+  if (!res.ok) { showErrorPopup(data.error || 'Login failed'); return false; }
   storeAuthSession(data);
   return true;
 }
@@ -190,15 +241,15 @@ async function getUserBalance() {
 }
 
 async function claimDailyBonus() {
-  if (!isLoggedIn()) { alert('Log in to claim your daily bonus.'); return; }
+  if (!isLoggedIn()) { showErrorPopup('Log in to claim your daily bonus.'); return; }
   const res = await fetchWithAuth('/api/balance', {
     method: 'POST',
     body: JSON.stringify({ action: 'claim_daily_bonus' }),
   });
   const data = await res.json();
-  if (!res.ok) { alert(data.error || 'Could not claim daily bonus'); return; }
+  if (!res.ok) { showErrorPopup(data.error || 'Could not claim daily bonus'); return; }
   applyServerBalance(data.balance);
-  alert('Daily bonus claimed: +$100');
+  showSuccessPopup('Daily bonus claimed: +$100');
 }
 
 function universalUpdateDisplayBalance() {

@@ -1,8 +1,22 @@
 import { createGuestSession } from '../../lib/wallet'
+import { rejectIfRateLimited } from '../../lib/rate-limit'
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '4kb',
+    },
+  },
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST')
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  if (rejectIfRateLimited(req, res, { name: 'guest', limit: 20, windowMs: 60 * 1000 })) {
+    return
   }
 
   const { action } = req.body

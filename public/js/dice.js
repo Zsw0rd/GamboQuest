@@ -4,7 +4,7 @@ function toggleDiceAudio() {
   diceAudioEnabled = !diceAudioEnabled;
   const icon = document.getElementById('diceAudioToggle');
   if (!icon) return;
-  icon.textContent = diceAudioEnabled ? '🔊' : '🔇';
+  icon.textContent = diceAudioEnabled ? AUDIO_ON_ICON : AUDIO_OFF_ICON;
   icon.style.color = diceAudioEnabled ? 'gold' : 'red';
 }
 
@@ -60,8 +60,8 @@ function initDiceGame() {
   window.dicePlaceBet = async function () {
     const bet = Math.floor(parseFloat(diceBetAmount?.value) || 0);
     const threshold = parseInt(diceRoll?.value, 10) || 50;
-    if (bet <= 0) { alert('Invalid bet amount!'); return; }
-    if (bet > getStoredBalance()) { alert('Insufficient balance!'); return; }
+    if (bet <= 0) { showErrorPopup('Invalid bet amount!'); return; }
+    if (bet > getStoredBalance()) { showErrorPopup('Insufficient balance!'); return; }
 
     const rollBtn = document.querySelector('.dice-roll-btn, button[onclick*="dicePlaceBet"]');
     if (rollBtn) rollBtn.disabled = true;
@@ -81,7 +81,7 @@ function initDiceGame() {
     clearInterval(tick);
     if (rollBtn) rollBtn.disabled = false;
 
-    if (result.error) { alert(result.error); return; }
+    if (result.error) { showErrorPopup(result.error); return; }
 
     if (rollMessage) rollMessage.textContent = `Roll = ${result.rollResult.toFixed(2)}`;
     if (result.won) {

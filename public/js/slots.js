@@ -12,7 +12,7 @@ function toggleSlotAudio() {
   slotAudioEnabled = !slotAudioEnabled;
   const icon = document.getElementById('slotAudioToggle');
   if (!icon) return;
-  icon.textContent = slotAudioEnabled ? '🔊' : '🔇';
+  icon.textContent = slotAudioEnabled ? AUDIO_ON_ICON : AUDIO_OFF_ICON;
   icon.style.color = slotAudioEnabled ? 'gold' : 'red';
 }
 
@@ -39,8 +39,8 @@ async function slotPlaySlot() {
 
   const bet = parseInt(betInput.value, 10);
   const balance = getStoredBalance();
-  if (isNaN(bet) || bet <= 0) { alert('Please enter a valid bet amount.'); return; }
-  if (bet > balance) { alert('Insufficient balance.'); return; }
+  if (isNaN(bet) || bet <= 0) { showErrorPopup('Please enter a valid bet amount.'); return; }
+  if (bet > balance) { showErrorPopup('Insufficient balance.'); return; }
 
   spinButton.disabled = true;
   resultMessage.textContent = '';
@@ -57,7 +57,7 @@ async function slotPlaySlot() {
 
   if (result.error) {
     clearInterval(i1); clearInterval(i2); clearInterval(i3);
-    alert(result.error);
+    showErrorPopup(result.error);
     spinButton.disabled = false;
     return;
   }

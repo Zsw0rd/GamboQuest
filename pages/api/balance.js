@@ -4,13 +4,27 @@ import {
   getProfile,
   getAccessToken,
 } from '../../lib/supabase'
+import { rejectIfRateLimited } from '../../lib/rate-limit'
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '8kb',
+    },
+  },
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST')
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { action, amount, reason, metadata } = req.body
+  if (rejectIfRateLimited(req, res, { name: 'balance', limit: 60, windowMs: 60 * 1000 })) {
+    return
+  }
+
+  const { action } = req.body
   const accessToken = getAccessToken(req)
 
   if (!action || !accessToken) {
